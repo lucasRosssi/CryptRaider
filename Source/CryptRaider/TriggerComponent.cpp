@@ -20,26 +20,60 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+  if (TriggersMovement && !Mover)
+  {
+    return;
+  }
+  if (TriggersRotation && !MyRotator)
+  {
+    return;
+  }
+
   AActor* Actor = GetTriggableActor();
   if (Actor)
   {
     UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+
     if (Component)
     {
       Component->SetSimulatePhysics(false);
     }
+
     Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
-    Mover->SetShouldMove(true);
+
+    if (TriggersMovement)
+    {
+      Mover->SetShouldMove(true);
+    }
+
+    if (TriggersRotation)
+    {
+      MyRotator->SetShouldRotate(true);
+    }
+
   }
   else
   {
-    Mover->SetShouldMove(false);
+    if (TriggersMovement)
+    {
+      Mover->SetShouldMove(false);
+    }
+
+    if (TriggersRotation)
+    {
+      MyRotator->SetShouldRotate(false);
+    }
   }
 }
 
 void UTriggerComponent::SetMover(UMover* NewMover)
 {
   Mover = NewMover;
+}
+
+void UTriggerComponent::SetMyRotator(UMyRotator* NewRotator)
+{
+  MyRotator = NewRotator;
 }
 
 AActor* UTriggerComponent::GetTriggableActor() const

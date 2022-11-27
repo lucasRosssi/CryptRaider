@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "Mover.h"
+#include "MyRotator.h"
 #include "TriggerComponent.generated.h"
 
 /**
@@ -28,11 +29,20 @@ public:
   UFUNCTION(BlueprintCallable)
   void SetMover(UMover* Mover);
 
+  UFUNCTION(BlueprintCallable)
+  void SetMyRotator(UMyRotator* MyRotator);
+
 private:
   UPROPERTY(EditAnywhere)
   FName TriggableActorTag;
-
+  UPROPERTY(EditAnywhere)
+  bool TriggersRotation = false;
+  UPROPERTY(EditAnywhere)
+  bool TriggersMovement = false;
+  
   UMover* Mover;
+
+  UMyRotator* MyRotator;
 
   AActor* GetTriggableActor() const;
 };
